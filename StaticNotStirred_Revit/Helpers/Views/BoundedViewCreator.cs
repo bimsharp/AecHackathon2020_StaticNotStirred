@@ -37,36 +37,87 @@ namespace StaticNotStirred_Revit.Helpers.Views
             }
         }
 
-        public string GetViewName(string prefix)
+        public string GetViewName(string prefix, string suffix)
         {
-            return GetViewName(Level, ScopeBox, prefix);
+            return GetViewName(Level, ScopeBox, prefix, suffix);
         }
 
-        public static string GetViewName(Level level, Element scopeBox, string prefix)
+        public static string GetViewName(Level level, Element scopeBox, string prefix, string suffix)
         {
             string _delimiter = " - ";
 
-            string _viewName = string.Empty;
-            if (string.IsNullOrWhiteSpace(prefix) == false) _viewName = prefix + _delimiter;
-
             List<string> _nameParts = new List<string>();
-            if (level != null) _nameParts.Add(level.Name);
-            if (scopeBox != null) _nameParts.Add(scopeBox.Name);
 
-            _viewName += string.Join(_delimiter, _nameParts);
+            if (string.IsNullOrWhiteSpace(prefix) == false) _nameParts.Add(prefix);
+            if (level != null) _nameParts.Add(getCleanedNameWithNumbers(level.Name));
+            if (scopeBox != null) _nameParts.Add(getCleanedNameWithNumbers(scopeBox.Name));
+            if (string.IsNullOrWhiteSpace(suffix) == false) _nameParts.Add(suffix);
 
+            string _viewName = string.Join(_delimiter, _nameParts);
             return _viewName;
         }
 
+        private static string getCleanedNameWithNumbers(string name)
+        {
+            int _padding = 2;
+
+            char? _lastChar = name.LastOrDefault();
+            if (_lastChar == null ||
+                _lastChar.HasValue == false ||
+                char.IsDigit(_lastChar.Value) == false) return name;
+
+            string _numericChars = string.Empty;
+            string _nonNumericChars = string.Empty;
+            bool _secondPeriodFound = false;
+            foreach (char _char in name.Reverse())
+            {
+                if (_char == '.' || char.IsDigit(_char) && _secondPeriodFound == false) _numericChars += _char;
+                else if (_char == '.' && _numericChars.Contains('.'))
+                {
+                    _secondPeriodFound = true;
+                    _nonNumericChars += _char;
+                }
+                else _nonNumericChars += _char;
+            }
+            _numericChars = new string(_numericChars.Reverse().ToArray());
+            _nonNumericChars = new string(_nonNumericChars.Reverse().ToArray());
+
+            if (_numericChars.Contains('.'))
+            {
+                if (double.TryParse(_numericChars, out double _doubleSheetNumber))
+                {
+                    return _nonNumericChars + _doubleSheetNumber.ToString("D" + _padding);
+                }
+                else return name;
+
+            }
+            else if (_numericChars.Length > 0)
+            {
+                if (int.TryParse(_numericChars, out int _intSheetNumber))
+                {
+                    return _nonNumericChars + _intSheetNumber.ToString("D" + _padding);
+                }
+                else return name;
+            }
+            else return name;
+        }
+
         public View3D CreateView3D(int scale)
+        {
+            string _viewName = GetViewName(string.Empty, "3D");
+
+            return CreateView3D(scale, _viewName);
+        }
+
+        public View3D CreateView3D(int scale, string viewName)
         {
             Document _doc = Level?.Document;
             if (_doc == null) return null;
 
             View3D _view3D = View3D.CreateIsometric(_doc, _3DViewFamilyType.Id);
-            _view3D.SetSectionBox(Bounds);
-            string _viewName = GetViewName("3D");
-            if (string.IsNullOrWhiteSpace(_viewName) == false) _view3D.Name = _viewName;
+            if (Bounds != null) _view3D.SetSectionBox(Bounds);
+
+            if (string.IsNullOrWhiteSpace(viewName) == false) _view3D.Name = viewName;
             _view3D.Scale = scale;
 
             return _view3D;
@@ -76,6 +127,7 @@ namespace StaticNotStirred_Revit.Helpers.Views
         {
 
             //ToDo: this... isn't right.
+            //ToDo: account for case where Bounds/Scope Box is not set
             throw new NotImplementedException();
 
             //Document _doc = Level?.Document;
@@ -115,13 +167,27 @@ namespace StaticNotStirred_Revit.Helpers.Views
 
         public ViewPlan CreateViewPlan(int scale)
         {
+            string _viewName = GetViewName(string.Empty, "FP");
+            return CreateViewPlan(scale, _viewName);
+        }
+
+        public ViewPlan CreateViewPlan(int scale, string viewName)
+        {
             Document _doc = Level?.Document;
             if (_doc == null) return null;
 
             ViewPlan _viewPlan = ViewPlan.Create(_doc, _floorPlanViewFamilyType.Id, Level.Id);
-            _viewPlan.get_Parameter(BuiltInParameter.VIEWER_VOLUME_OF_INTEREST_CROP)?.Set(ScopeBox.Id);
-            string _viewName = GetViewName("FloorPlan");
-            if (string.IsNullOrWhiteSpace(_viewName) == false) _viewPlan.Name = _viewName;
+            if (ScopeBox != null)
+            {
+                _viewPlan.get_Parameter(BuiltInParameter.VIEWER_VOLUME_OF_INTEREST_CROP)?.Set(ScopeBox.Id);
+            }
+            else if (ScopeBox == null && Bounds != null)
+            {
+                _viewPlan.CropBoxActive = true;
+                _viewPlan.CropBox = Bounds;
+            }
+
+            if (string.IsNullOrWhiteSpace(viewName) == false) _viewPlan.Name = viewName;
             _viewPlan.Scale = scale;
 
             return _viewPlan;
