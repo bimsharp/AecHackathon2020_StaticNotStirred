@@ -45,6 +45,9 @@
       <HintPath>..\..\..\Program Files\Autodesk\Revit 2021\RevitAPIUI.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="StaticNotStirred_UI">
+      <HintPath>..\StaticNotStirred_UI\bin\Debug\StaticNotStirred_UI.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
@@ -58,20 +61,28 @@
   <ItemGroup>
     <Compile Include="Application\App.cs" />
     <Compile Include="Helpers\Annotations\DimensionCreator.cs" />
+    <Compile Include="Helpers\Annotations\GenericAnnotationCreator.cs" />
     <Compile Include="Helpers\CalculationOutputs.cs" />
     <Compile Include="Helpers\Geometry\GeometryHelpers.cs" />
     <Compile Include="Helpers\Selections\Getters.cs" />
     <Compile Include="Helpers\Views\BoundedViewCreator.cs" />
     <Compile Include="Helpers\Views\ScheduleCreator.cs" />
     <Compile Include="Helpers\Views\SheetCreator.cs" />
+    <Compile Include="Models\BuildingLoadModel.cs" />
+    <Compile Include="Models\FloorModel.cs" />
+    <Compile Include="Models\FloorProfileModel.cs" />
+    <Compile Include="Models\LevelLoadModel.cs" />
+    <Compile Include="Models\SquareLoadModel.cs" />
+    <Compile Include="StructuralReshoring\Commands\CreateVisualizationSheetsCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\CreateFloorplateSheetsCmd.cs" />
     <Compile Include="StructuralReshoring\Commands\DataOutputForCalcsCmd.cs" />
-    <Compile Include="StructuralReshoring\Commands\TraceLoadHatchingCmd.cs" />
-    <Compile Include="StructuralReshoring\Commands\CreateDeliverableSheetsCmd.cs" />
-    <Compile Include="StructuralReshoring\Commands\PlaceTemporayShoringCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\AggregateLoadDataCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\CreatePourSheetsCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\PlaceTemporaryShoringCmd.cs" />
     <Compile Include="Helpers\Extension.cs" />
     <Compile Include="Helpers\Families\EllisShore_LumberWithClampsFamilyDefinition.cs" />
     <Compile Include="Helpers\Families\EllisShore_LumberWithClampsFamilyType.cs" />
-    <Compile Include="Helpers\Families\FamilyHelper.cs" />
+    <Compile Include="Helpers\Families\FamilyHelpers.cs" />
     <Compile Include="Helpers\Families\IFamilyDefinition.cs" />
     <Compile Include="Helpers\Families\ReplaceFamilyOptions.cs" />
     <Compile Include="Helpers\Selections\ScopeBoxSelectionFilter.cs" />
@@ -105,6 +116,7 @@
   <ItemGroup>
     <Content Include="Resources\StaticNotStirred_Revit.addin" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PostBuildEvent>call "C:\$\AEC Hackathon 2020\StaticNotStirred_Revit\Scripts\DebugTo2021.bat"</PostBuildEvent>

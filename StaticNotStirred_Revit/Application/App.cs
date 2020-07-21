@@ -29,15 +29,31 @@ namespace StaticNotStirred_Revit
                     _placeTemporaryShoringCmdButtonName + "_id", 
                     _placeTemporaryShoringCmdButtonName, 
                     _assemblyPath, 
-                    typeof(PlaceTemporayShoringCmd).FullName)) as PushButton;
+                    typeof(PlaceTemporaryShoringCmd).FullName)) as PushButton;
 
-                // Create Sectioned Views
-                string _createSectionedViewsCmdButtonName = "Create\nViews";
-                PushButton _createSectionedViewsCmdButton = _ribbonPanel.AddItem(new PushButtonData(
-                    _createSectionedViewsCmdButtonName + "_id",
-                    _createSectionedViewsCmdButtonName,
+                // Create Pour Sheets
+                string _createPourSheetsCmdButtonName = "Create\nPour Sheets";
+                PushButton _createPourSheetsCmdButton = _ribbonPanel.AddItem(new PushButtonData(
+                    _createPourSheetsCmdButtonName + "_id",
+                    _createPourSheetsCmdButtonName,
                     _assemblyPath,
-                    typeof(CreateDeliverableSheetsCmd).FullName)) as PushButton;
+                    typeof(CreatePourSheetsCmd).FullName)) as PushButton;
+
+                // Create Floorplate Sheets
+                string _createFloorplateSheetsCmdButtonName = "Create\nFloorplate\nSheets";
+                PushButton _createFloorplateSheetsCmdButton = _ribbonPanel.AddItem(new PushButtonData(
+                    _createFloorplateSheetsCmdButtonName + "_id",
+                    _createFloorplateSheetsCmdButtonName,
+                    _assemblyPath,
+                    typeof(CreateFloorplateSheetsCmd).FullName)) as PushButton;
+
+                // Create Visualization Sheets
+                string _createVisualizationSheetsCmdButtonName = "Create\nVisualization\nSheets";
+                PushButton _createVisualizationSheetsCmdButton = _ribbonPanel.AddItem(new PushButtonData(
+                    _createVisualizationSheetsCmdButtonName + "_id",
+                    _createVisualizationSheetsCmdButtonName,
+                    _assemblyPath,
+                    typeof(CreateVisualizationSheetsCmd).FullName)) as PushButton;
 
                 // DataOutput
                 string _dataOutputForCalcsCmdButtonName = "Data Output\nFor Calcs";

@@ -14,7 +14,10 @@ namespace StaticNotStirred_Revit.Helpers.Views
 
         public SheetCreator(Document doc)
         {
-            var _titleblocks = Getters.GetTitleblockSymbols(doc);
+            var _titleblocks = new FilteredElementCollector(doc)
+                .OfCategory(BuiltInCategory.OST_TitleBlocks)
+                .OfType<FamilySymbol>()
+                .OrderBy(p => p.Name).ToList();
 
             _titleblockMaps = new Dictionary<string, FamilySymbol>();
             foreach (var _titleblock in _titleblocks)
@@ -28,8 +31,8 @@ namespace StaticNotStirred_Revit.Helpers.Views
 
         public ViewSheet CreateSheet(string titleblockName, string sheetName, string sheetNumber)
         {
-            if (_titleblockMaps.ContainsKey(titleblockName) == false || 
-                _titleblockMaps[titleblockName] == null || 
+            if (_titleblockMaps.ContainsKey(titleblockName) == false ||
+                _titleblockMaps[titleblockName] == null ||
                 _titleblockMaps[titleblockName].IsValidObject == false) return null;
 
             FamilySymbol _titleblockSymbol = _titleblockMaps[titleblockName];

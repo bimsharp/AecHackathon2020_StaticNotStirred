@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Autodesk.Revit.Creation;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -10,6 +11,8 @@ namespace StaticNotStirred_Revit.Helpers
 {
     public class CalculationOutputs
     {
+        //ToDo: calcs are per change in condition change - like concreteThickness/beams/verticalSurfaces, assume 153 PCF for concrete density
+
         //http://dl.mycivil.ir/dozanani/ACI/ACI%20347.2R-05%20Guide%20for%20Shoring-Reshoring%20of%20Concrete%20Multistory%20Buildings_MyCivil.ir.pdf
 
         //Design Criteria
@@ -22,6 +25,7 @@ namespace StaticNotStirred_Revit.Helpers
         //public double Height { get; set; }          //decimal feet
         //public double FormworkLoad { get; set; }    //linear ft (lbs per foot)
 
+        public Guid Id { get; set; }
         public double ConcreteDensity { get; set; }                 //Pcf
         public string ConcreteDensityUnits { get; set; }
 
@@ -49,6 +53,7 @@ namespace StaticNotStirred_Revit.Helpers
         //ToDo: from link in schedule
         public double ClearShoreHeight { get; set; }                //ft   
         public string ClearShoreHeightUnits { get; set; }
+
         //public LoadReductions                                     //
 
         //LoadReductionPercent                                      //%      //                    v	60	    %	reduction factor of design live loads
@@ -61,7 +66,7 @@ namespace StaticNotStirred_Revit.Helpers
 
         public CalculationOutputs()
         {
-
+            Id = Guid.NewGuid();
         }
 
         internal void SerializeToXml(string filePathName)
@@ -107,7 +112,6 @@ namespace StaticNotStirred_Revit.Helpers
 
             return _settings;
         }
-
 
 
 

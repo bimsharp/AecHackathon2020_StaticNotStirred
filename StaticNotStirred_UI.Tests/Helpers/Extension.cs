@@ -1,14 +1,17 @@
-﻿using Autodesk.Revit.DB;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
+using System.Xml.Linq;
 
-namespace StaticNotStirred_Revit.Helpers
+namespace StaticNotStirred_UI.Tests.Helpers
 {
     internal static class Extension
     {
@@ -42,34 +45,20 @@ namespace StaticNotStirred_Revit.Helpers
             return description;
         }
 
-
-        //From Jeremy Tammik - The Building Coder - Util.cs
-        public static XYZ ProjectOnto(this Plane plane, XYZ p)
+        public static XElement ToXML(object o)
         {
-            double _d = SignedDistanceTo(plane, p);
+            Type t = o.GetType();
 
-            XYZ _q = p - _d * plane.Normal;
+            Type[] extraTypes = t.GetProperties()
+                .Where(p => p.PropertyType.IsInterface || p.PropertyType.IsSerializable == false)
+                .Select(p => p.GetValue(o, null).GetType())
+                .ToArray();
 
-            return _q;
-        }
-
-        //From Jeremy Tammik - The Building Coder - Util.cs
-        public static UV ProjectInto(this Plane plane, XYZ p)
-        {
-            XYZ _q = ProjectOnto(plane, p);
-            XYZ _o = plane.Origin;
-            XYZ _d = _q - _o;
-            double _u = _d.DotProduct(plane.XVec);
-            double _v = _d.DotProduct(plane.YVec);
-            return new UV(_u, _v);
-        }
-
-        //From Jeremy Tammik - The Building Coder - Util.cs
-        public static double SignedDistanceTo(this Plane plane, XYZ p)
-        {
-            XYZ _v = p - plane.Origin;
-
-            return plane.Normal.DotProduct(_v);
+            DataContractSerializer serializer = new DataContractSerializer(t, extraTypes);
+            StringWriter sw = new StringWriter();
+            XmlTextWriter xw = new XmlTextWriter(sw);
+            serializer.WriteObject(xw, o);
+            return XElement.Parse(sw.ToString());
         }
     }
 }

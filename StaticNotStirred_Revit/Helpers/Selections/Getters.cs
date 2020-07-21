@@ -23,6 +23,13 @@ namespace StaticNotStirred_Revit.Helpers.Selections
                 .OrderBy(p => p.Elevation).ToList();
         }
 
+        public static List<Floor> GetFloors(Document doc)
+        {
+            return new FilteredElementCollector(doc)
+                .OfClass(typeof(Floor)).Cast<Floor>()
+                .OrderBy(p => p.get_BoundingBox(null)?.Max.Z).ToList();
+        }
+
         public static List<FamilyInstance> GetColumnsByView(View view)
         {
             Document _doc = view.Document;
@@ -38,6 +45,18 @@ namespace StaticNotStirred_Revit.Helpers.Selections
                 .OfCategory(BuiltInCategory.OST_TitleBlocks)
                 .OfType<FamilySymbol>()
                 .OrderBy(p => p.Name).ToList();
+        }
+
+        internal static List<Element> GetIntersectedElements(Document doc, IEnumerable<Element> elementsToCheck, Solid solid)
+        {
+            ElementFilter _filter = new ElementIntersectsSolidFilter(solid);
+
+            List<Element> _elements = new FilteredElementCollector(doc, elementsToCheck.Select(p => p.Id).ToList())
+                //.WhereElementIsNotElementType()
+                //.WhereElementIsViewIndependent()
+                .WherePasses(_filter).ToList();
+
+            return _elements;
         }
     }
 }
