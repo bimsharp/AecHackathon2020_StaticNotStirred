@@ -1,3 +1,0 @@
-echo f | xcopy /y /r /f "C:\$\AEC Hackathon 2020\StaticNotStirred_Revit\Resources\StaticNotStirred_Revit.addin" "C:\ProgramData\Autodesk\Revit\Addins\2021\StaticNotStirred_Revit.addin" 
-echo f | xcopy /y /r /f "C:\$\AEC Hackathon 2020\StaticNotStirred_Revit\bin\Debug\StaticNotStirred_Revit.dll" "C:\ProgramData\Autodesk\Revit\Addins\2021\StaticNotStirred_Revit.dll"
-echo f | xcopy /y /r /f "C:\$\AEC Hackathon 2020\StaticNotStirred_Revit\bin\Debug\StaticNotStirred_UI.dll" "C:\ProgramData\Autodesk\Revit\Addins\2021\StaticNotStirred_UI.dll"

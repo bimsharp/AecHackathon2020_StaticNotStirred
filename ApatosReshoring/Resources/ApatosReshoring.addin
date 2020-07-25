@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<RevitAddIns>  
+	<AddIn Type="Application">    
+		<Name>ApatosReshoring</Name>    
+		<Assembly>C:\ProgramData\Autodesk\Revit\Addins\2021\ApatosReshoring\ApatosReshoring_Revit.dll</Assembly>
+		<ClientId>71478A6E-6407-49DC-8B37-CD9686F029D5</ClientId>
+		<FullClassName>StaticNotStirred_Revit.App</FullClassName>    
+		<Text>Apatos Reshoring</Text>    
+		<VendorId>SNSR</VendorId>    
+		<VendorDescription>AEC Hackathon - ApatosReshoring - Static Not Stirred - Structural Reshoring</VendorDescription>
+    <VisibilityMode>AlwaysVisible</VisibilityMode>
+	</AddIn>
+</RevitAddIns>
