@@ -1,0 +1,121 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{20D25DD4-A89E-40B2-8EA1-715A6799DB49}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>ApatosReshoring_Revit</RootNamespace>
+    <AssemblyName>ApatosReshoring_Revit</AssemblyName>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>bin\Debug\ApatosReshoring_Revit.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="AdWindows">
+      <HintPath>..\..\..\Program Files\Autodesk\Revit 2021\AdWindows.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPI">
+      <HintPath>..\..\..\Program Files\Autodesk\Revit 2021\RevitAPI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="RevitAPIUI">
+      <HintPath>..\..\..\Program Files\Autodesk\Revit 2021\RevitAPIUI.dll</HintPath>
+      <Private>False</Private>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Application\App.cs" />
+    <Compile Include="Helpers\Annotations\DimensionCreator.cs" />
+    <Compile Include="Helpers\Annotations\GenericAnnotationCreator.cs" />
+    <Compile Include="Helpers\Annotations\TagCreator.cs" />
+    <Compile Include="Helpers\Families\Names.cs" />
+    <Compile Include="Helpers\Geometry\GeometryHelpers.cs" />
+    <Compile Include="Helpers\Parameters\Ids.cs" />
+    <Compile Include="Helpers\Selections\Getters.cs" />
+    <Compile Include="Helpers\Views\BoundedViewCreator.cs" />
+    <Compile Include="Helpers\Views\ScheduleCreator.cs" />
+    <Compile Include="Helpers\Views\SheetCreator.cs" />
+    <Compile Include="Models\BuildingLoadModel.cs" />
+    <Compile Include="Models\LevelLoadModel.cs" />
+    <Compile Include="Models\LoadModel.cs" />
+    <Compile Include="StructuralReshoring\Commands\CreateVisualizationViewCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\CreateReshoringLayoutSheetsCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\CreatePourSheetsCmd.cs" />
+    <Compile Include="StructuralReshoring\Commands\PlaceTemporaryShoringCmd.cs" />
+    <Compile Include="Helpers\Extension.cs" />
+    <Compile Include="Helpers\Families\FamilyDefinition.cs" />
+    <Compile Include="Helpers\Families\FamilyHelpers.cs" />
+    <Compile Include="Helpers\Families\ReplaceFamilyOptions.cs" />
+    <Compile Include="Helpers\Selections\ScopeBoxSelectionFilter.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="StructuralReshoring\VisualizationDeliverable.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\LiveLoads.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\ApatosReshoring_UI\ApatosReshoring_UI.csproj">
+      <Project>{2201fb35-3051-4812-aa02-5fc9a00066ff}</Project>
+      <Name>ApatosReshoring_UI</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>call "C:\$\AEC Hackathon 2020\ApatosReshoring\Scripts\DebugTo2021.bat"</PostBuildEvent>
+  </PropertyGroup>
+</Project>
